@@ -15,6 +15,8 @@ import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -56,7 +58,11 @@ public class Manager {
             }
 
             if (options.getHost() != null) {
-                builder.setHost(options.getHost());
+                try {
+                    builder.setHostAddress(InetAddress.getByName(options.getHost()));
+                } catch (UnknownHostException e) {
+                    builder.setHost(options.getHost());
+                }
             }
 
             builder.setCompressionEnabled(options.getCompression());
