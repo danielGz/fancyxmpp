@@ -31,6 +31,16 @@ android {
 
 }
 
+configurations {
+    all*.exclude group: 'xpp3', module: 'xpp3'
+}
+
+android {
+    lintOptions {
+        abortOnError false
+    }
+}
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

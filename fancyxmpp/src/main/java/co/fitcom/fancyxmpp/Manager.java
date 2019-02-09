@@ -41,11 +41,11 @@ public class Manager {
         return mManager;
     }
 
-    public AbstractXMPPConnection createConnection(ConnectionOptions options) {
+    public AbstractXMPPConnection createConnection(final ConnectionOptions options) {
 
         XMPPTCPConnection connection = null;
         try {
-            XMPPTCPConnectionConfiguration.Builder builder = XMPPTCPConnectionConfiguration.builder()
+            final XMPPTCPConnectionConfiguration.Builder builder = XMPPTCPConnectionConfiguration.builder()
                     .setUsernameAndPassword(options.getUsername(), options.getPassword());
 
 
@@ -58,11 +58,18 @@ public class Manager {
             }
 
             if (options.getHost() != null) {
-                try {
-                    builder.setHostAddress(InetAddress.getByName(options.getHost()));
-                } catch (UnknownHostException e) {
-                    builder.setHost(options.getHost());
-                }
+
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            builder.setHostAddress(InetAddress.getByName(options.getHost()));
+                        } catch (UnknownHostException e) {
+                            builder.setHost(options.getHost());
+                        }
+                    }
+                });
+
             }
 
             builder.setCompressionEnabled(options.getCompression());
